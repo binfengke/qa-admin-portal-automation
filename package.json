@@ -1,0 +1,22 @@
+{
+  "name": "qa-admin-portal-automation",
+  "private": true,
+  "packageManager": "pnpm@10.29.2",
+  "scripts": {
+    "dev": "pnpm -r --parallel dev",
+    "build": "pnpm -r build",
+    "test": "pnpm -F @qa-sample/e2e test",
+    "test:smoke": "pnpm -F @qa-sample/e2e test:smoke",
+    "docker:up": "docker compose up -d --build",
+    "docker:down": "docker compose down -v"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@prisma/client",
+      "@prisma/engines",
+      "esbuild",
+      "playwright",
+      "prisma"
+    ]
+  }
+}
