@@ -1,5 +1,7 @@
 # QA Admin Portal Automation (API + UI)
 
+[![ci](https://github.com/binfengke/qa-admin-portal-automation/actions/workflows/ci.yml/badge.svg)](https://github.com/binfengke/qa-admin-portal-automation/actions/workflows/ci.yml)
+
 Reference app + automation sample for QA / QA Automation roles.
 
 This repo is intentionally **small but realistic**: an Admin Portal (web + API + DB) with **cookie auth + RBAC** and a Playwright suite that runs **API tests + UI tests** in a single runner.
