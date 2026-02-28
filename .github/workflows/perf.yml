@@ -1,0 +1,67 @@
+name: perf (jmeter)
+
+on:
+  workflow_dispatch:
+    inputs:
+      threads:
+        description: "Concurrent users (threads)"
+        required: false
+        default: "10"
+      rampUp:
+        description: "Ramp-up seconds"
+        required: false
+        default: "10"
+      duration:
+        description: "Test duration seconds"
+        required: false
+        default: "60"
+      thinkMs:
+        description: "Think time per request (ms)"
+        required: false
+        default: "0"
+
+jobs:
+  jmeter:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Start services
+        run: docker compose up -d --build
+
+      - name: Wait for API
+        run: |
+          for i in {1..60}; do
+            curl -fsS http://localhost:3000/healthz > /dev/null && exit 0
+            sleep 2
+          done
+          echo "API not ready"
+          docker compose logs api
+          exit 1
+
+      - name: Run JMeter (API load)
+        run: |
+          docker compose --profile perf run --rm jmeter \
+            -n -t /tests/admin-portal-api.jmx \
+            -l /results/results.jtl \
+            -e -o /results/html \
+            -Jthreads=${{ inputs.threads }} \
+            -JrampUp=${{ inputs.rampUp }} \
+            -Jduration=${{ inputs.duration }} \
+            -JthinkMs=${{ inputs.thinkMs }}
+
+      - name: Upload JMeter report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jmeter-report
+          path: |
+            tests/perf/results/results.jtl
+            tests/perf/results/html
+
+      - name: Shutdown
+        if: always()
+        run: docker compose down -v
+

@@ -20,3 +20,6 @@ playwright-report/
 test-results/
 tests/e2e/.auth/
 
+# JMeter (perf)
+tests/perf/results/*
+!tests/perf/results/.gitkeep

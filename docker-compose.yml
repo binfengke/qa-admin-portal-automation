@@ -49,5 +49,15 @@ services:
       timeout: 3s
       retries: 20
 
+  jmeter:
+    image: justb4/jmeter:5.5
+    profiles: ["perf"]
+    depends_on:
+      api:
+        condition: service_healthy
+    volumes:
+      - ./tests/perf/jmeter:/tests:ro
+      - ./tests/perf/results:/results
+
 volumes:
   db_data:

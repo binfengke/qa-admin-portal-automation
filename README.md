@@ -64,6 +64,32 @@ $env:API_BASE_URL="http://localhost:13000"
 pnpm test:smoke
 ```
 
+## Performance testing (JMeter)
+
+This repo includes a basic JMeter test plan for **authenticated API read load**:
+
+- Test plan: `tests/perf/jmeter/admin-portal-api.jmx`
+- Output: `tests/perf/results/`
+
+Run:
+
+```bash
+pnpm docker:up
+pnpm perf:jmeter
+```
+
+Tune load (examples):
+
+```bash
+pnpm perf:jmeter -- -Jthreads=25 -JrampUp=10 -Jduration=120
+pnpm perf:jmeter -- -JthinkMs=100
+```
+
+Report:
+
+- HTML: `tests/perf/results/html/index.html`
+- Raw: `tests/perf/results/results.jtl`
+
 ## Key endpoints (API)
 
 - `POST /auth/login` (sets `access_token` cookie)
