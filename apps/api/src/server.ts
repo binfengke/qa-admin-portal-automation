@@ -1,10 +1,10 @@
 import cookie from "@fastify/cookie";
 import cors from "@fastify/cors";
 import jwt from "@fastify/jwt";
+import type { PrismaClient } from "@prisma/client";
 import Fastify from "fastify";
 import { getEnv } from "./lib/env";
 import { errorHandler } from "./lib/errors";
-import { prisma } from "./lib/prisma";
 import { registerAuthRoutes } from "./routes/auth";
 import { registerHealthzRoutes } from "./routes/healthz";
 import { registerMeRoutes } from "./routes/me";
@@ -13,15 +13,16 @@ import { registerUsersRoutes } from "./routes/users";
 
 export async function buildServer(args?: {
   logger?: boolean;
-  prisma?: typeof prisma;
+  prisma?: PrismaClient;
 }) {
   const env = getEnv();
+  const prismaClient = args?.prisma ?? (await import("./lib/prisma")).prisma;
 
   const server = Fastify({
     logger: args?.logger ?? true,
   });
 
-  server.decorate("prisma", args?.prisma ?? prisma);
+  server.decorate("prisma", prismaClient);
   server.decorateRequest("currentUser", null);
 
   server.setErrorHandler(errorHandler);
