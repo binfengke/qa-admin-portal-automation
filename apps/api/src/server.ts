@@ -11,14 +11,17 @@ import { registerMeRoutes } from "./routes/me";
 import { registerProjectsRoutes } from "./routes/projects";
 import { registerUsersRoutes } from "./routes/users";
 
-export async function buildServer() {
+export async function buildServer(args?: {
+  logger?: boolean;
+  prisma?: typeof prisma;
+}) {
   const env = getEnv();
 
   const server = Fastify({
-    logger: true,
+    logger: args?.logger ?? true,
   });
 
-  server.decorate("prisma", prisma);
+  server.decorate("prisma", args?.prisma ?? prisma);
   server.decorateRequest("currentUser", null);
 
   server.setErrorHandler(errorHandler);

@@ -51,6 +51,12 @@ pnpm -F @qa-sample/e2e exec playwright install chromium
 pnpm test:smoke
 ```
 
+API unit + integration tests (Vitest):
+
+```bash
+pnpm test:api
+```
+
 If you changed Docker ports via `WEB_HOST_PORT` / `API_HOST_PORT`, set:
 
 - `WEB_BASE_URL` (default `http://localhost:8080`)

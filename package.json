@@ -7,6 +7,7 @@
     "build": "pnpm -r build",
     "test": "pnpm -F @qa-sample/e2e test",
     "test:smoke": "pnpm -F @qa-sample/e2e test:smoke",
+    "test:api": "pnpm -F @qa-sample/api test",
     "docker:up": "docker compose up -d --build",
     "docker:down": "docker compose down -v",
     "perf:jmeter": "docker compose --profile perf run --rm jmeter -n -t /tests/admin-portal-api.jmx -l /results/results.jtl -e -o /results/html"
