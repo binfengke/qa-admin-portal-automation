@@ -13,6 +13,16 @@ This repo is intentionally **small but realistic**: an Admin Portal (web + API +
 - UI automation: stable selectors (`data-testid`), role-based UI visibility checks
 - Test ergonomics: tagging (`@smoke`), HTML report, trace/video on failure (CI)
 
+## Quality Notes (SDET)
+
+- Test pyramid: API unit + integration (Vitest) → E2E smoke (Playwright API + UI)
+- CI: `pnpm test:api` → `docker compose up -d --build` → `pnpm test:smoke` (uploads Playwright report/artifacts)
+- Flaky policy: stable locators (`data-testid` / role / label), no hard sleeps, isolate test data (API-based setup when possible)
+- Performance: JMeter plan `tests/perf/jmeter/admin-portal-api.jmx` (authenticated API read load) + HTML report in `tests/perf/results/html/`
+- DB validation (Postgres examples):
+  - `SELECT "role","status",COUNT(*) AS cnt FROM "User" GROUP BY 1,2 ORDER BY 1,2;`
+  - `SELECT "key",COUNT(*) AS cnt FROM "Project" GROUP BY 1 HAVING COUNT(*)>1;`
+
 ## Tech stack
 
 - **API**: Fastify + Prisma + Postgres
