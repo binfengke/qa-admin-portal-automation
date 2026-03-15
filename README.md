@@ -29,6 +29,31 @@ This repo is intentionally **small but realistic**: an Admin Portal (web + API +
 - **Web**: React + Vite (served by Nginx in Docker), `/api` reverse-proxied to API
 - **Automation**: Playwright (`@playwright/test`) for **API + UI**
 
+## Architecture (high-level)
+
+```mermaid
+flowchart TB
+  subgraph Compose["Docker Compose"]
+    DB[(Postgres)]
+    API[Fastify API]
+    WEB["Web (React) + Nginx"]
+    WEB -->|/api reverse proxy| API
+    API --> DB
+  end
+
+  subgraph Automation["Automation"]
+    Vitest["Vitest<br/>(API unit + integration)"]
+    PW["Playwright<br/>(API + UI smoke)"]
+    JMeter["JMeter<br/>(perf)"]
+  end
+
+  Vitest --> API
+  PW --> API
+  PW --> WEB
+  JMeter --> API
+  PW --> Artifacts["Artifacts<br/>playwright-report/ + test-results/"]
+```
+
 ## Quick start (Docker)
 
 ```bash
