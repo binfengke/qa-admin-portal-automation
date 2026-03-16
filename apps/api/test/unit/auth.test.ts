@@ -62,8 +62,9 @@ describe("auth guards (unit)", () => {
       },
     } as any;
 
-    await expect(requireAuth(request, {} as any)).rejects.toBeInstanceOf(ApiError);
-    await expect(requireAuth(request, {} as any)).rejects.toMatchObject({
+    const err = await requireAuth(request, {} as any).catch((e) => e);
+    expect(err).toBeInstanceOf(ApiError);
+    expect(err).toMatchObject({
       statusCode: 401,
       code: "UNAUTHORIZED",
     });
