@@ -1,6 +1,6 @@
 # Contract Testing Implementation Plan
 
-> **For agentic workers:** REQUIRED: Use superpowers:subagent-driven-development (if subagents available) or superpowers:executing-plans to implement this plan. Steps use checkbox (`- [ ]`) syntax for tracking.
+> Execution note: Steps use checkbox (`- [ ]`) syntax for tracking during implementation.
 
 **Goal:** Add minimal OpenAPI-based provider contract verification for `POST /auth/login`, `GET /me`, and `GET /users`.
 
