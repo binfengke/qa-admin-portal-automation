@@ -6,11 +6,17 @@ Reference app + automation sample for QA / QA Automation roles.
 
 This repo is intentionally **small but realistic**: an Admin Portal (web + API + DB) with **cookie auth + RBAC** and a Playwright suite that runs **API tests + UI tests** in a single runner.
 
+## Portfolio Highlights
+
+- Contract testing: explicit OpenAPI contract artifact + provider verification in Vitest for key endpoints
+- Layered test strategy: unit tests, API integration tests, provider contract verification, Playwright smoke, and performance sample
+- Realistic QA surface area: cookie auth, RBAC, Dockerized app stack, seeded test users, and CI-ready automation
+
 ## What this demonstrates
 
 - End-to-end setup: `docker compose up` → app is usable + tests can run in CI
-- API automation: auth, RBAC negative tests, contract-ish assertions (Zod)
-- Explicit provider contract verification: OpenAPI contract for key endpoints verified in Vitest integration tests
+- API automation: auth, RBAC negative tests, and Zod-based schema assertions
+- Contract testing: explicit OpenAPI provider contract verification for key endpoints in Vitest integration tests
 - UI automation: stable selectors (`data-testid`), role-based UI visibility checks
 - Test ergonomics: tagging (`@smoke`), HTML report, trace/video on failure (CI)
 
@@ -186,9 +192,9 @@ tests/e2e   # Playwright API + UI tests (one runner)
 GitHub Actions workflow: `.github/workflows/ci.yml`
 
 - Builds and starts services via Docker Compose
-- Runs API unit + integration tests, including provider contract verification
+- Runs API unit + integration tests first, including provider contract verification
 - Installs Playwright Chromium
-- Runs `pnpm test:smoke`
+- Runs `pnpm test:smoke` after API verification passes
 - Uploads `playwright-report/` and `test-results/` artifacts
 
 ## Troubleshooting
