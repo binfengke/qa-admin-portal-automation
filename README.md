@@ -10,6 +10,7 @@ This repo is intentionally **small but realistic**: an Admin Portal (web + API +
 
 - End-to-end setup: `docker compose up` → app is usable + tests can run in CI
 - API automation: auth, RBAC negative tests, contract-ish assertions (Zod)
+- Explicit provider contract verification: OpenAPI contract for key endpoints verified in Vitest integration tests
 - UI automation: stable selectors (`data-testid`), role-based UI visibility checks
 - Test ergonomics: tagging (`@smoke`), HTML report, trace/video on failure (CI)
 
@@ -92,6 +93,36 @@ API unit + integration tests (Vitest):
 pnpm test:api
 ```
 
+This includes:
+
+- unit tests for auth guards
+- integration tests for auth / RBAC / pagination
+- provider contract verification for key API endpoints
+
+## Contract Testing
+
+This repo includes a minimal **provider contract testing** layer for core API endpoints:
+
+- Contract artifact: `contracts/admin-api.openapi.yaml`
+- Provider verification: `apps/api/test/integration/contract.auth.test.ts`
+- Provider verification: `apps/api/test/integration/contract.me.test.ts`
+- Provider verification: `apps/api/test/integration/contract.users.test.ts`
+
+What is verified:
+
+- `POST /auth/login`
+- `GET /me`
+- `GET /users`
+
+The contract is intentionally small and stable. It locks down:
+
+- response status codes
+- required response fields
+- field types / enums
+- shared error envelope
+
+It does **not** lock down volatile details like JWT contents or the exact cookie string.
+
 If you changed Docker ports via `WEB_HOST_PORT` / `API_HOST_PORT`, set:
 
 - `WEB_BASE_URL` (default `http://localhost:8080`)
@@ -146,6 +177,7 @@ Report:
 ```text
 apps/api    # Fastify + Prisma API
 apps/web    # React UI
+contracts   # OpenAPI contract used for provider verification
 tests/e2e   # Playwright API + UI tests (one runner)
 ```
 
@@ -154,6 +186,7 @@ tests/e2e   # Playwright API + UI tests (one runner)
 GitHub Actions workflow: `.github/workflows/ci.yml`
 
 - Builds and starts services via Docker Compose
+- Runs API unit + integration tests, including provider contract verification
 - Installs Playwright Chromium
 - Runs `pnpm test:smoke`
 - Uploads `playwright-report/` and `test-results/` artifacts
