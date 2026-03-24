@@ -96,16 +96,16 @@ Prereqs: Node 20+ and `pnpm` (recommended via corepack).
 
 ```bash
 corepack enable
-pnpm install
-pnpm docker:up
-pnpm -F @qa-sample/e2e exec playwright install chromium
-pnpm test:smoke
+corepack pnpm install
+docker compose up -d --build
+corepack pnpm -F @qa-sample/e2e exec playwright install chromium
+corepack pnpm -F @qa-sample/e2e test:smoke
 ```
 
 API unit + integration tests (Vitest):
 
 ```bash
-pnpm test:api
+corepack pnpm test:api
 ```
 
 This includes:
@@ -156,7 +156,7 @@ Example:
 ```bash
 $env:WEB_BASE_URL="http://localhost:18080"
 $env:API_BASE_URL="http://localhost:13000"
-pnpm test:smoke
+corepack pnpm -F @qa-sample/e2e test:smoke
 ```
 
 ## Performance testing (JMeter)
@@ -169,15 +169,15 @@ This repo includes a basic JMeter test plan for **authenticated API read load**:
 Run:
 
 ```bash
-pnpm docker:up
-pnpm perf:jmeter
+docker compose up -d --build
+corepack pnpm perf:jmeter
 ```
 
 Tune load (examples):
 
 ```bash
-pnpm perf:jmeter -- -Jthreads=25 -JrampUp=10 -Jduration=120
-pnpm perf:jmeter -- -JthinkMs=100
+corepack pnpm perf:jmeter -- -Jthreads=25 -JrampUp=10 -Jduration=120
+corepack pnpm perf:jmeter -- -JthinkMs=100
 ```
 
 Report:
@@ -218,3 +218,4 @@ GitHub Actions workflow: `.github/workflows/ci.yml`
 
 - Ports in use: set `WEB_HOST_PORT` / `API_HOST_PORT` before `docker compose up`
 - Reset DB: `docker compose down -v` (removes the docker volume)
+- HTML report: `corepack pnpm -F @qa-sample/e2e exec playwright show-report`
