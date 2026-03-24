@@ -43,12 +43,13 @@ export function UsersPage() {
       <div className="card">
         <div className="row" style={{ justifyContent: "space-between" }}>
           <div className="stack" style={{ gap: 4 }}>
-            <div style={{ fontWeight: 800, fontSize: 20 }}>Users</div>
+            <h1 style={{ fontWeight: 800, fontSize: 20, margin: 0 }}>Users</h1>
             <div className="muted">Search / sort / RBAC-enabled CRUD</div>
           </div>
 
           <div className="row" style={{ width: 360 }}>
             <input
+              aria-label="Search users by email"
               className="input"
               data-testid="users-search"
               placeholder="Search email…"
@@ -64,9 +65,10 @@ export function UsersPage() {
 
       {isAdmin ? (
         <div className="card stack">
-          <div style={{ fontWeight: 700 }}>Create user</div>
+          <h2 style={{ fontWeight: 700, margin: 0 }}>Create user</h2>
           <div className="row" style={{ gap: 10 }}>
             <input
+              aria-label="Create user email"
               className="input"
               data-testid="create-user-email"
               placeholder="email@example.com"
@@ -74,6 +76,7 @@ export function UsersPage() {
               onChange={(e) => setCreateEmail(e.target.value)}
             />
             <select
+              aria-label="Create user role"
               className="select"
               data-testid="create-user-role"
               value={createRole}
@@ -86,6 +89,7 @@ export function UsersPage() {
           </div>
           <div className="row" style={{ gap: 10 }}>
             <input
+              aria-label="Create user password"
               className="input"
               data-testid="create-user-password"
               value={createPassword}

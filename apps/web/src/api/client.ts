@@ -5,8 +5,8 @@ export type ApiErrorPayload = {
 
 export class ApiError extends Error {
   public readonly code: string;
-  public readonly requestId?: string;
-  public readonly details?: unknown;
+  public readonly requestId: string | undefined;
+  public readonly details: unknown;
 
   constructor(payload: ApiErrorPayload) {
     super(payload.error.message);

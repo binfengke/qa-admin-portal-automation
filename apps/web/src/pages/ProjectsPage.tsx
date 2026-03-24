@@ -42,12 +42,13 @@ export function ProjectsPage() {
       <div className="card">
         <div className="row" style={{ justifyContent: "space-between" }}>
           <div className="stack" style={{ gap: 4 }}>
-            <div style={{ fontWeight: 800, fontSize: 20 }}>Projects</div>
+            <h1 style={{ fontWeight: 800, fontSize: 20, margin: 0 }}>Projects</h1>
             <div className="muted">List + RBAC-enabled CRUD</div>
           </div>
 
           <div className="row" style={{ width: 360 }}>
             <input
+              aria-label="Search projects by name or key"
               className="input"
               data-testid="projects-search"
               placeholder="Search name/key…"
@@ -63,9 +64,10 @@ export function ProjectsPage() {
 
       {isAdmin ? (
         <div className="card stack">
-          <div style={{ fontWeight: 700 }}>Create project</div>
+          <h2 style={{ fontWeight: 700, margin: 0 }}>Create project</h2>
           <div className="row" style={{ gap: 10 }}>
             <input
+              aria-label="Create project name"
               className="input"
               data-testid="create-project-name"
               placeholder="Project name"
@@ -73,6 +75,7 @@ export function ProjectsPage() {
               onChange={(e) => setCreateName(e.target.value)}
             />
             <input
+              aria-label="Create project key"
               className="input"
               data-testid="create-project-key"
               placeholder="KEY"

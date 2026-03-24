@@ -12,7 +12,7 @@ function Layout(props: { children: React.ReactNode }) {
   return (
     <div className="container">
       <div className="grid">
-        <div className="card nav">
+        <nav className="card nav" aria-label="Primary">
           <div className="stack" style={{ gap: 6 }}>
             <div style={{ fontWeight: 700 }}>QA Admin Portal</div>
             <div className="muted" data-testid="current-user">
@@ -41,9 +41,9 @@ function Layout(props: { children: React.ReactNode }) {
               Logout
             </button>
           </div>
-        </div>
+        </nav>
 
-        <div className="stack">{props.children}</div>
+        <main className="stack">{props.children}</main>
       </div>
     </div>
   );

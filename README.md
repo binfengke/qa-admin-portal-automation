@@ -9,15 +9,16 @@ This repo is intentionally **small but realistic**: an Admin Portal (web + API +
 ## Portfolio Highlights
 
 - Contract testing: explicit OpenAPI contract artifact + provider verification in Vitest for key endpoints
-- Layered test strategy: unit tests, API integration tests, provider contract verification, Playwright smoke, and performance sample
+- Layered test strategy: unit tests, API integration tests, provider contract verification, DB validation, Playwright smoke, accessibility smoke, and performance sample
 - Realistic QA surface area: cookie auth, RBAC, Dockerized app stack, seeded test users, and CI-ready automation
 
 ## What this demonstrates
 
 - End-to-end setup: `docker compose up` → app is usable + tests can run in CI
 - API automation: auth, RBAC negative tests, and Zod-based schema assertions
+- DB validation: Playwright API flow verifies the persisted Postgres record after user creation
 - Contract testing: explicit OpenAPI provider contract verification for key endpoints in Vitest integration tests
-- UI automation: stable selectors (`data-testid`), role-based UI visibility checks
+- UI automation: stable selectors (`data-testid`), role-based UI visibility checks, and axe-based accessibility smoke
 - Test ergonomics: tagging (`@smoke`), HTML report, trace/video on failure (CI)
 
 ## Quality Notes (SDET)
@@ -25,6 +26,7 @@ This repo is intentionally **small but realistic**: an Admin Portal (web + API +
 - Test pyramid: API unit + integration (Vitest) → E2E smoke (Playwright API + UI)
 - CI: `pnpm test:api` → `docker compose up -d --build` → `pnpm test:smoke` (uploads Playwright report/artifacts)
 - Flaky policy: stable locators (`data-testid` / role / label), no hard sleeps, isolate test data (API-based setup when possible)
+- Accessibility smoke: Playwright + `@axe-core/playwright` on the main admin list pages
 - Performance: JMeter plan `tests/perf/jmeter/admin-portal-api.jmx` (authenticated API read load) + HTML report in `tests/perf/results/html/`
 - DB validation (Postgres examples):
   - `SELECT "role","status",COUNT(*) AS cnt FROM "User" GROUP BY 1,2 ORDER BY 1,2;`
@@ -69,11 +71,18 @@ docker compose up -d --build
 
 - Web: `http://localhost:8080` (override with `WEB_HOST_PORT`)
 - API: `http://localhost:3000` (override with `API_HOST_PORT`)
+- DB: `localhost:5432` (override with `DB_HOST_PORT`)
 
 If you already have ports 3000/8080 in use:
 
 ```bash
 WEB_HOST_PORT=18080 API_HOST_PORT=13000 docker compose up -d --build
+```
+
+If you also need to move Postgres for local DB validation:
+
+```bash
+WEB_HOST_PORT=18080 API_HOST_PORT=13000 DB_HOST_PORT=15432 docker compose up -d --build
 ```
 
 Seeded users:
@@ -104,6 +113,13 @@ This includes:
 - unit tests for auth guards
 - integration tests for auth / RBAC / pagination
 - provider contract verification for key API endpoints
+- DB validation against the real Postgres record for created users
+
+Accessibility smoke (Playwright UI):
+
+- `tests/e2e/tests/ui/admin.spec.ts`
+- Covers `/users` and `/projects`
+- Runs axe against the rendered page after the smoke navigation succeeds
 
 ## Contract Testing
 
@@ -133,6 +149,7 @@ If you changed Docker ports via `WEB_HOST_PORT` / `API_HOST_PORT`, set:
 
 - `WEB_BASE_URL` (default `http://localhost:8080`)
 - `API_BASE_URL` (default `http://localhost:3000`)
+- `DATABASE_URL` (default `postgresql://postgres:postgres@localhost:5432/qa_admin_portal?schema=public`)
 
 Example:
 
