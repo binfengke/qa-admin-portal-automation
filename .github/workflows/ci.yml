@@ -83,7 +83,7 @@ jobs:
         run: |
           node tools/qa-release-cockpit/dist/cli.js analyze \
             --config qarc.config.json \
-            --playwright tests/e2e/playwright-report/results.json \
+            --playwright tests/e2e/test-results/results.json \
             --output-dir release-cockpit-report \
             --fail-on no-go
 

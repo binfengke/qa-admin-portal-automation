@@ -15,7 +15,7 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   reporter: [
     ["list"],
-    ["json", { outputFile: "playwright-report/results.json" }],
+    ["json", { outputFile: "test-results/results.json" }],
     ["html", { open: "never" }],
   ],
   globalSetup: "./global-setup",
