@@ -11,6 +11,7 @@ This repo is intentionally **small but realistic**: an Admin Portal (web + API +
 - Contract testing: explicit OpenAPI contract artifact + provider verification in Vitest for key endpoints
 - Layered test strategy: unit tests, API integration tests, provider contract verification, DB validation, Playwright smoke, accessibility smoke, and performance sample
 - Realistic QA surface area: cookie auth, RBAC, Dockerized app stack, seeded test users, and CI-ready automation
+- Release readiness governance: CI turns Playwright artifacts into a QA Release Cockpit go/no-go report, job summary, PR comment, and downloadable evidence bundle
 
 ## What this demonstrates
 
@@ -19,12 +20,13 @@ This repo is intentionally **small but realistic**: an Admin Portal (web + API +
 - DB validation: Playwright API flow verifies the persisted Postgres record after user creation
 - Contract testing: explicit OpenAPI provider contract verification for key endpoints in Vitest integration tests
 - UI automation: stable selectors (`data-testid`), role-based UI visibility checks, and axe-based accessibility smoke
-- Test ergonomics: tagging (`@smoke`), HTML report, trace/video on failure (CI)
+- Release governance: Playwright JSON is evaluated by [QA Release Cockpit](https://github.com/binfengke/qa-release-cockpit) with explicit thresholds in `qarc.config.json`
+- Test ergonomics: tagging (`@smoke`), HTML/JSON reports, trace/video on failure (CI)
 
 ## Quality Notes (SDET)
 
 - Test pyramid: API unit + integration (Vitest) → E2E smoke (Playwright API + UI)
-- CI: `pnpm test:api` → `docker compose up -d --build` → `pnpm test:smoke` (uploads Playwright report/artifacts)
+- CI: `pnpm test:api` → `docker compose up -d --build` → `pnpm test:smoke` → QA Release Cockpit go/no-go report
 - Flaky policy: stable locators (`data-testid` / role / label), no hard sleeps, isolate test data (API-based setup when possible)
 - Accessibility smoke: Playwright + `@axe-core/playwright` on the main admin list pages
 - Performance: JMeter plan `tests/perf/jmeter/admin-portal-api.jmx` (authenticated API read load) + HTML report in `tests/perf/results/html/`

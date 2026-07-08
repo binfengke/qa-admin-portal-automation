@@ -1,0 +1,12 @@
+{
+  "thresholds": {
+    "minPassRate": 0.95,
+    "maxFailedTests": 0,
+    "criticalTags": ["@smoke", "critical", "@admin", "@rbac"],
+    "maxAccessibilityViolations": 0,
+    "minLighthouseAccessibility": 0.9,
+    "minLighthousePerformance": 0.7,
+    "maxP95Ms": 1000,
+    "maxJMeterErrorRate": 0
+  }
+}

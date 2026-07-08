@@ -19,6 +19,7 @@ yarn-error.log*
 playwright-report/
 test-results/
 tests/e2e/.auth/
+release-cockpit-report/
 
 # JMeter (perf)
 tests/perf/results/*
